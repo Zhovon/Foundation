@@ -1,0 +1,167 @@
+<style>
+    .auth-page {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--space-2xl) var(--space-lg);
+        background: linear-gradient(135deg, hsl(var(--color-primary) / 0.05), hsl(var(--color-accent) / 0.05));
+    }
+
+    .auth-container {
+        width: 100%;
+        max-width: 450px;
+    }
+
+    .auth-card {
+        background: hsl(var(--color-surface));
+        padding: var(--space-3xl);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-xl);
+    }
+
+    .auth-header {
+        text-align: center;
+        margin-bottom: var(--space-2xl);
+    }
+
+    .auth-header h1 {
+        font-size: var(--font-size-3xl);
+        margin-bottom: var(--space-sm);
+    }
+
+    .auth-header p {
+        color: hsl(var(--color-text-muted));
+    }
+
+    .form-group {
+        margin-bottom: var(--space-lg);
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: var(--space-sm);
+        font-weight: 500;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: var(--space-md);
+        border: 1px solid hsl(var(--color-border));
+        border-radius: var(--radius-md);
+        font-size: var(--font-size-md);
+        transition: border-color var(--transition-fast);
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: hsl(var(--color-primary));
+    }
+
+    .auth-divider {
+        display: flex;
+        align-items: center;
+        margin: var(--space-xl) 0;
+        color: hsl(var(--color-text-muted));
+    }
+
+    .auth-divider::before,
+    .auth-divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: hsl(var(--color-border));
+    }
+
+    .auth-divider span {
+        padding: 0 var(--space-md);
+    }
+
+    .auth-footer {
+        text-align: center;
+        margin-top: var(--space-xl);
+        color: hsl(var(--color-text-muted));
+    }
+
+    .auth-footer a {
+        color: hsl(var(--color-primary));
+        font-weight: 500;
+    }
+
+    .google-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-md);
+        width: 100%;
+        padding: var(--space-md);
+        background: white;
+        border: 1px solid hsl(var(--color-border));
+        border-radius: var(--radius-md);
+        font-size: var(--font-size-md);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+    }
+
+    .google-btn:hover {
+        background: hsl(var(--color-background));
+        border-color: hsl(var(--color-primary));
+    }
+</style>
+
+<%- include('../layouts/main', { title: 'Login - GrantWise AI' , body: ` <div class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card fade-in">
+            <div class="auth-header">
+                <h1>Welcome Back</h1>
+                <p>Sign in to continue to GrantWise AI</p>
+            </div>
+
+            <form action="/auth/login" method="POST">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="you@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="••••••••">
+                </div>
+
+                <div style="text-align: right; margin-bottom: var(--space-lg);">
+                    <a href="/forgot-password"
+                        style="color: hsl(var(--color-primary)); font-size: var(--font-size-sm);">
+                        Forgot password?
+                    </a>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Sign In
+                </button>
+            </form>
+
+            <div class="auth-divider">
+                <span>or</span>
+            </div>
+
+            <a href="/auth/google" class="google-btn">
+                <svg width="20" height="20" viewBox="0 0 20 20">
+                    <path fill="#4285F4"
+                        d="M19.6 10.23c0-.82-.1-1.42-.25-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z" />
+                    <path fill="#34A853"
+                        d="M13.46 15.13c-.83.59-1.96 1-3.46 1-2.64 0-4.88-1.74-5.68-4.15H1.07v2.52C2.72 17.75 6.09 20 10 20c2.7 0 4.96-.89 6.62-2.42l-3.16-2.45z" />
+                    <path fill="#FBBC05"
+                        d="M3.99 10c0-.69.12-1.35.32-1.97V5.51H1.07A9.973 9.973 0 000 10c0 1.61.39 3.14 1.07 4.49l3.24-2.52c-.2-.62-.32-1.28-.32-1.97z" />
+                    <path fill="#EA4335"
+                        d="M10 3.88c1.88 0 3.13.81 3.85 1.48l2.84-2.76C14.96.99 12.7 0 10 0 6.09 0 2.72 2.25 1.07 5.51l3.24 2.52C5.12 5.62 7.36 3.88 10 3.88z" />
+                </svg>
+                Continue with Google
+            </a>
+
+            <div class="auth-footer">
+                Don't have an account? <a href="/signup">Sign up</a>
+            </div>
+        </div>
+    </div>
+    </div>
+    ` }) %>
