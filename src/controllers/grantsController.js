@@ -51,7 +51,7 @@ exports.getGrantDetails = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const grant = await getGrantDetails(id);
+        const grant = await getGrantDetailsService(id);
 
         res.json({
             success: true,
@@ -113,7 +113,7 @@ exports.showGrantsPage = (req, res) => {
 exports.showGrantDetail = async (req, res) => {
     try {
         const { id } = req.params;
-        const grant = await getGrantDetails(id);
+        const grant = await getGrantDetailsService(id);
 
         res.render('pages/grant-detail', {
             title: `${grant.title} - GrantWise AI`,
