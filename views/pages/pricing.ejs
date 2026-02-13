@@ -1,0 +1,311 @@
+<style>
+    .pricing-hero {
+        text-align: center;
+        padding: var(--space-3xl) 0;
+        background: linear-gradient(135deg, hsl(var(--color-primary)), hsl(var(--color-accent)));
+        color: white;
+    }
+
+    .pricing-hero h1 {
+        color: white;
+        margin-bottom: var(--space-md);
+    }
+
+    .pricing-hero p {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: var(--font-size-lg);
+    }
+
+    .pricing-section {
+        padding: var(--space-3xl) 0;
+    }
+
+    .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: var(--space-2xl);
+        margin-top: var(--space-2xl);
+    }
+
+    .pricing-card {
+        background: hsl(var(--color-surface));
+        border-radius: var(--radius-xl);
+        padding: var(--space-2xl);
+        box-shadow: var(--shadow-lg);
+        position: relative;
+        transition: all var(--transition-base);
+    }
+
+    .pricing-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-xl);
+    }
+
+    .pricing-card.featured {
+        border: 3px solid hsl(var(--color-primary));
+        transform: scale(1.05);
+    }
+
+    .pricing-card.featured::before {
+        content: 'Most Popular';
+        position: absolute;
+        top: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, hsl(var(--color-primary)), hsl(var(--color-accent)));
+        color: white;
+        padding: var(--space-sm) var(--space-lg);
+        border-radius: var(--radius-full);
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+    }
+
+    .pricing-tier {
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        color: hsl(var(--color-primary));
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: var(--space-sm);
+    }
+
+    .pricing-amount {
+        font-size: var(--font-size-4xl);
+        font-weight: 800;
+        color: hsl(var(--color-text));
+        margin-bottom: var(--space-xs);
+    }
+
+    .pricing-amount span {
+        font-size: var(--font-size-lg);
+        font-weight: 400;
+        color: hsl(var(--color-text-muted));
+    }
+
+    .pricing-description {
+        color: hsl(var(--color-text-light));
+        margin-bottom: var(--space-xl);
+        padding-bottom: var(--space-xl);
+        border-bottom: 1px solid hsl(var(--color-background));
+    }
+
+    .pricing-features {
+        list-style: none;
+        margin-bottom: var(--space-xl);
+    }
+
+    .pricing-features li {
+        padding: var(--space-sm) 0;
+        display: flex;
+        align-items: flex-start;
+        gap: var(--space-sm);
+    }
+
+    .pricing-features li::before {
+        content: '✓';
+        color: hsl(var(--color-success));
+        font-weight: 800;
+        flex-shrink: 0;
+    }
+
+    .faq-section {
+        padding: var(--space-3xl) 0;
+        background: hsl(var(--color-background));
+    }
+
+    .faq-grid {
+        display: grid;
+        gap: var(--space-lg);
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .faq-item {
+        background: hsl(var(--color-surface));
+        padding: var(--space-xl);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .faq-item h3 {
+        color: hsl(var(--color-primary));
+        margin-bottom: var(--space-md);
+        font-size: var(--font-size-lg);
+    }
+
+    .roi-calculator {
+        background: linear-gradient(135deg, hsl(var(--color-secondary)), hsl(var(--color-secondary-light)));
+        padding: var(--space-3xl);
+        border-radius: var(--radius-2xl);
+        color: white;
+        text-align: center;
+        margin: var(--space-3xl) 0;
+    }
+
+    .roi-calculator h2 {
+        color: white;
+        margin-bottom: var(--space-lg);
+    }
+
+    .roi-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--space-xl);
+        margin-top: var(--space-2xl);
+    }
+
+    .roi-stat {
+        background: rgba(255, 255, 255, 0.1);
+        padding: var(--space-xl);
+        border-radius: var(--radius-lg);
+        backdrop-filter: blur(10px);
+    }
+
+    .roi-stat-value {
+        font-size: var(--font-size-4xl);
+        font-weight: 800;
+        margin-bottom: var(--space-sm);
+    }
+
+    .roi-stat-label {
+        font-size: var(--font-size-sm);
+        opacity: 0.9;
+    }
+</style>
+
+<%- include('../layouts/main', { body: ` <!-- Pricing Hero -->
+    <section class="pricing-hero">
+        <div class="container">
+            <h1>Simple, Transparent Pricing</h1>
+            <p>Choose the plan that fits your nonprofit's needs</p>
+        </div>
+    </section>
+
+    <!-- Pricing Cards -->
+    <section class="pricing-section">
+        <div class="container">
+            <div class="pricing-grid">
+                <!-- Starter Plan -->
+                <div class="pricing-card animate-on-scroll">
+                    <div class="pricing-tier">Starter</div>
+                    <div class="pricing-amount">$49<span>/month</span></div>
+                    <p class="pricing-description">Perfect for small nonprofits just getting started with grant writing
+                    </p>
+                    <ul class="pricing-features">
+                        <li>5 proposals per month</li>
+                        <li>Basic AI generation</li>
+                        <li>Export to Word & PDF</li>
+                        <li>Email support</li>
+                        <li>Guidelines compliance checker</li>
+                    </ul>
+                    <a href="/generate" class="btn btn-outline" style="width: 100%;">Get Started</a>
+                </div>
+
+                <!-- Professional Plan (Featured) -->
+                <div class="pricing-card featured animate-on-scroll">
+                    <div class="pricing-tier">Professional</div>
+                    <div class="pricing-amount">$99<span>/month</span></div>
+                    <p class="pricing-description">For organizations serious about securing funding</p>
+                    <ul class="pricing-features">
+                        <li>Unlimited proposals</li>
+                        <li>Organization Voice Learning</li>
+                        <li>Guidelines compliance checker</li>
+                        <li>Priority AI processing</li>
+                        <li>Export to Word, PDF & Google Docs</li>
+                        <li>Priority support</li>
+                        <li>Batch generation</li>
+                    </ul>
+                    <a href="/generate" class="btn btn-primary" style="width: 100%;">Start Free Trial</a>
+                </div>
+
+                <!-- Team Plan -->
+                <div class="pricing-card animate-on-scroll">
+                    <div class="pricing-tier">Team</div>
+                    <div class="pricing-amount">$199<span>/month</span></div>
+                    <p class="pricing-description">For teams that need collaboration and advanced features</p>
+                    <ul class="pricing-features">
+                        <li>Everything in Professional</li>
+                        <li>Team collaboration (up to 5 users)</li>
+                        <li>Shared proposal library</li>
+                        <li>Activity logs & analytics</li>
+                        <li>Dedicated account manager</li>
+                        <li>Custom integrations</li>
+                        <li>Funder intelligence</li>
+                    </ul>
+                    <a href="/generate" class="btn btn-secondary" style="width: 100%;">Contact Sales</a>
+                </div>
+            </div>
+
+            <!-- ROI Calculator -->
+            <div class="roi-calculator">
+                <h2>See Your Return on Investment</h2>
+                <p>Average time saved and funding secured by our users</p>
+                <div class="roi-stats">
+                    <div class="roi-stat">
+                        <div class="roi-stat-value">85%</div>
+                        <div class="roi-stat-label">Time Saved on Proposals</div>
+                    </div>
+                    <div class="roi-stat">
+                        <div class="roi-stat-value">$120K</div>
+                        <div class="roi-stat-label">Average Funding Secured</div>
+                    </div>
+                    <div class="roi-stat">
+                        <div class="roi-stat-value">3x</div>
+                        <div class="roi-stat-label">More Proposals Submitted</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Frequently Asked Questions</h2>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item animate-on-scroll">
+                    <h3>Do you offer nonprofit discounts?</h3>
+                    <p>Yes! All our pricing already reflects a 20% nonprofit discount. We also offer special pricing for
+                        organizations with annual budgets under $100K. Contact us to learn more.</p>
+                </div>
+                <div class="faq-item animate-on-scroll">
+                    <h3>Can I cancel anytime?</h3>
+                    <p>Absolutely. There are no long-term commitments. You can cancel your subscription at any time, and
+                        you'll retain access until the end of your billing period.</p>
+                </div>
+                <div class="faq-item animate-on-scroll">
+                    <h3>What if I need more proposals?</h3>
+                    <p>You can upgrade to a higher tier at any time, or purchase additional proposals à la carte for $15
+                        each. We'll prorate your upgrade so you only pay the difference.</p>
+                </div>
+                <div class="faq-item animate-on-scroll">
+                    <h3>Do you offer custom plans?</h3>
+                    <p>Yes! For large organizations, foundations, or grant writing consultants, we offer custom
+                        enterprise plans with volume pricing, white-labeling, and dedicated support.</p>
+                </div>
+                <div class="faq-item animate-on-scroll">
+                    <h3>Is there a free trial?</h3>
+                    <p>Yes! All plans come with a 14-day free trial. No credit card required. You can generate your
+                        first proposal completely free to see if GrantWise AI is right for you.</p>
+                </div>
+                <div class="faq-item animate-on-scroll">
+                    <h3>What payment methods do you accept?</h3>
+                    <p>We accept all major credit cards (Visa, Mastercard, American Express, Discover) and ACH bank
+                        transfers for annual subscriptions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Transform Your Grant Writing?</h2>
+            <p>Start your free trial today - no credit card required</p>
+            <a href="/generate" class="btn btn-lg" style="background: white; color: hsl(var(--color-primary));">Start
+                Free Trial</a>
+        </div>
+    </section>
+    ` }) %>

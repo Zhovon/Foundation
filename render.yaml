@@ -1,0 +1,32 @@
+services:
+  # Web Service
+  - type: web
+    name: grantwise-ai
+    runtime: node
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        sync: false
+    autoDeploy: true
+    
+  # MongoDB Database (optional - can use MongoDB Atlas instead)
+  # Uncomment if you want Render to host your database
+  # - type: pserv
+  #   name: grantwise-mongodb
+  #   runtime: docker
+  #   env: docker
+  #   plan: free
+  #   dockerfilePath: ./Dockerfile.mongo

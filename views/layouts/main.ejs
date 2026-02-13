@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <!-- SEO Meta Tags -->
+  <title><%= title || 'GrantWise AI - AI-Powered Grant Proposals' %></title>
+  <meta name="description" content="Transform your project ideas into winning grant proposals in minutes with AI-powered drafting that learns your organization's voice.">
+  <meta name="keywords" content="grant writing, nonprofit, AI, proposal, funding, grants">
+  <meta name="author" content="GrantWise AI">
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="<%= title || 'GrantWise AI' %>">
+  <meta property="og:description" content="AI-powered grant proposal generation for nonprofits">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/animations.css">
+  
+  <!-- Additional page-specific styles -->
+  <%- typeof additionalStyles !== 'undefined' ? additionalStyles : '' %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <!-- Flash messages -->
+  <% if (typeof success !== 'undefined' && success.length > 0) { %>
+    <div class="container mt-3">
+      <% success.forEach(msg => { %>
+        <div class="alert alert-success"><%= msg %></div>
+      <% }) %>
+    </div>
+  <% } %>
+  
+  <% if (typeof error !== 'undefined' && error.length > 0) { %>
+    <div class="container mt-3">
+      <% error.forEach(msg => { %>
+        <div class="alert alert-error"><%= msg %></div>
+      <% }) %>
+    </div>
+  <% } %>
+  
+  <% if (typeof warning !== 'undefined' && warning.length > 0) { %>
+    <div class="container mt-3">
+      <% warning.forEach(msg => { %>
+        <div class="alert alert-warning"><%= msg %></div>
+      <% }) %>
+    </div>
+  <% } %>
+  
+  <% if (typeof info !== 'undefined' && info.length > 0) { %>
+    <div class="container mt-3">
+      <% info.forEach(msg => { %>
+        <div class="alert alert-info"><%= msg %></div>
+      <% }) %>
+    </div>
+  <% } %>
+  
+  <!-- Main content -->
+  <main>
+    <%- body %>
+  </main>
+  
+  <%- include('../partials/footer') %>
+  
+  <!-- Scripts -->
+  <script src="/js/main.js"></script>
+  
+  <!-- Additional page-specific scripts -->
+  <%- typeof additionalScripts !== 'undefined' ? additionalScripts : '' %>
+</body>
+</html>

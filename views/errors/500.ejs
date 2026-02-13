@@ -1,0 +1,86 @@
+<style>
+    .error-page {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: var(--space-3xl) 0;
+    }
+
+    .error-content {
+        max-width: 600px;
+    }
+
+    .error-code {
+        font-size: 120px;
+        font-weight: 800;
+        background: linear-gradient(135deg, hsl(var(--color-error)), hsl(var(--color-warning)));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+        margin-bottom: var(--space-lg);
+    }
+
+    .error-title {
+        font-size: var(--font-size-3xl);
+        margin-bottom: var(--space-md);
+    }
+
+    .error-message {
+        color: hsl(var(--color-text-light));
+        margin-bottom: var(--space-2xl);
+    }
+
+    .error-actions {
+        display: flex;
+        gap: var(--space-md);
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .error-illustration {
+        font-size: 100px;
+        margin-bottom: var(--space-xl);
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    .error-details {
+        background: hsl(var(--color-background));
+        padding: var(--space-lg);
+        border-radius: var(--radius-md);
+        margin-top: var(--space-xl);
+        text-align: left;
+        font-family: var(--font-mono);
+        font-size: var(--font-size-sm);
+        max-height: 200px;
+        overflow-y: auto;
+    }
+</style>
+
+<%- include('../layouts/main', { body: ` <section class="error-page">
+    <div class="container">
+        <div class="error-content fade-in">
+            <div class="error-illustration">⚠️</div>
+            <div class="error-code">500</div>
+            <h1 class="error-title">Something Went Wrong</h1>
+            <p class="error-message">
+                ${message || 'We encountered an unexpected error. Our team has been notified and is working on a fix.'}
+            </p>
+            <div class="error-actions">
+                <a href="/" class="btn btn-primary">Go Home</a>
+                <button onclick="location.reload()" class="btn btn-secondary">Try Again</button>
+                <a href="mailto:support@grantwise.ai" class="btn btn-outline">Contact Support</a>
+            </div>
+
+            <% if (typeof error !=='undefined' && error.stack) { %>
+                <details class="error-details">
+                    <summary style="cursor: pointer; margin-bottom: var(--space-sm);">Technical Details</summary>
+                    <pre><%= error.stack %></pre>
+                </details>
+                <% } %>
+        </div>
+    </div>
+    </section>
+    ` }) %>

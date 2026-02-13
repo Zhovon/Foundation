@@ -1,0 +1,309 @@
+<style>
+    .results-section {
+        padding: var(--space-3xl) 0;
+    }
+
+    .results-header {
+        text-align: center;
+        margin-bottom: var(--space-3xl);
+    }
+
+    .results-meta {
+        display: flex;
+        justify-content: center;
+        gap: var(--space-xl);
+        margin-top: var(--space-md);
+        color: hsl(var(--color-text-muted));
+        font-size: var(--font-size-sm);
+    }
+
+    .results-container {
+        display: grid;
+        grid-template-columns: 1fr 350px;
+        gap: var(--space-2xl);
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .proposal-display {
+        background: hsl(var(--color-surface));
+        padding: var(--space-3xl);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-lg);
+        font-family: var(--font-mono);
+        font-size: var(--font-size-sm);
+        line-height: 1.8;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    .proposal-display h1,
+    .proposal-display h2,
+    .proposal-display h3 {
+        font-family: var(--font-heading);
+        margin-top: var(--space-xl);
+        margin-bottom: var(--space-md);
+    }
+
+    .actions-sidebar {
+        position: sticky;
+        top: 100px;
+        height: fit-content;
+    }
+
+    .action-card {
+        background: hsl(var(--color-surface));
+        padding: var(--space-xl);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-md);
+        margin-bottom: var(--space-lg);
+    }
+
+    .action-card h3 {
+        font-size: var(--font-size-lg);
+        margin-bottom: var(--space-lg);
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+    }
+
+    .export-dropdown {
+        position: relative;
+    }
+
+    .export-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: hsl(var(--color-surface));
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-xl);
+        margin-top: var(--space-sm);
+        z-index: var(--z-dropdown);
+    }
+
+    .export-menu.active {
+        display: block;
+    }
+
+    .export-option {
+        padding: var(--space-md);
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+        cursor: pointer;
+        transition: background var(--transition-fast);
+    }
+
+    .export-option:hover {
+        background: hsl(var(--color-background));
+    }
+
+    .refinement-options {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+    }
+
+    .refinement-btn {
+        padding: var(--space-md);
+        background: hsl(var(--color-background));
+        border: 1px solid hsl(var(--color-background));
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        text-align: left;
+        font-size: var(--font-size-sm);
+    }
+
+    .refinement-btn:hover {
+        border-color: hsl(var(--color-primary));
+        background: hsl(var(--color-surface));
+    }
+
+    @media (max-width: 1024px) {
+        .results-container {
+            grid-template-columns: 1fr;
+        }
+
+        .actions-sidebar {
+            position: static;
+        }
+    }
+
+    @media print {
+
+        .actions-sidebar,
+        .results-header,
+        header,
+        footer {
+            display: none;
+        }
+
+        .proposal-display {
+            box-shadow: none;
+            padding: 0;
+        }
+    }
+</style>
+
+<%- include('../layouts/main', { title: 'Your Proposal - GrantWise AI' ,
+    additionalScripts: '<script src="/js/copyButton.js"></script>' , body: ` <section class="results-section">
+    <div class="container-wide">
+        <div class="results-header fade-in">
+            <h1>Your Proposal is Ready! 🎉</h1>
+            <div class="results-meta">
+                <span><strong>Project:</strong> ${projectName}</span>
+                <span><strong>Organization:</strong> ${organizationName}</span>
+                <span><strong>Generated:</strong> ${new Date(generatedAt).toLocaleDateString()}</span>
+            </div>
+        </div>
+
+        <div class="results-container">
+            <!-- Proposal Display -->
+            <div class="proposal-display fade-in-up" id="proposalContent">
+                ${proposal}
+            </div>
+
+            <!-- Actions Sidebar -->
+            <aside class="actions-sidebar fade-in">
+                <!-- Export Actions -->
+                <div class="action-card">
+                    <h3>📥 Export Proposal</h3>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" data-copy="proposalContent">
+                            📋 Copy to Clipboard
+                        </button>
+
+                        <div class="export-dropdown">
+                            <button class="btn btn-secondary" id="exportBtn">
+                                ⬇️ Download
+                            </button>
+                            <div class="export-menu" id="exportMenu">
+                                <a href="/export/pdf" class="export-option"
+                                    style="display: block; text-decoration: none; color: inherit;">
+                                    📄 Download as PDF
+                                </a>
+                                <a href="/export/word" class="export-option"
+                                    style="display: block; text-decoration: none; color: inherit;">
+                                    📝 Download as Word
+                                </a>
+                                <a href="/export/text" class="export-option"
+                                    style="display: block; text-decoration: none; color: inherit;">
+                                    📋 Download as Text
+                                </a>
+                                <button class="export-option" onclick="alert('Google Docs integration coming soon!')">
+                                    📑 Send to Google Docs
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Refinement -->
+                <div class="action-card">
+                    <h3>✨ Refine with AI</h3>
+                    <p
+                        style="font-size: var(--font-size-sm); color: hsl(var(--color-text-light)); margin-bottom: var(--space-md);">
+                        Coming soon: Refine your proposal with AI suggestions
+                    </p>
+                    <div class="refinement-options">
+                        <button class="refinement-btn" disabled>
+                            💪 Make it more persuasive
+                        </button>
+                        <button class="refinement-btn" disabled>
+                            ✂️ Shorten this section
+                        </button>
+                        <button class="refinement-btn" disabled>
+                            📝 Add more detail
+                        </button>
+                        <button class="refinement-btn" disabled>
+                            ✅ Check compliance
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Matching Grants -->
+                <% if (typeof matchingGrants !=='undefined' && matchingGrants && matchingGrants.length> 0) { %>
+                    <div class="action-card">
+                        <h3>🎯 Matching Grants</h3>
+                        <p
+                            style="font-size: var(--font-size-sm); color: hsl(var(--color-text-light)); margin-bottom: var(--space-md);">
+                            Based on your project, we found these relevant grants:
+                        </p>
+                        <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+                            <% matchingGrants.forEach(grant=> { %>
+                                <div
+                                    style="padding: var(--space-md); background: hsl(var(--color-background)); border-radius: var(--radius-md); border-left: 3px solid hsl(var(--color-primary));">
+                                    <div
+                                        style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--space-xs);">
+                                        <strong style="font-size: var(--font-size-sm); color: hsl(var(--color-text));">
+                                            <%= grant.title.substring(0, 60) %>
+                                                <%= grant.title.length> 60 ? '...' : '' %>
+                                        </strong>
+                                        <span
+                                            style="background: hsl(var(--color-primary)); color: white; padding: 2px 8px; border-radius: var(--radius-sm); font-size: var(--font-size-xs); white-space: nowrap;">
+                                            <%= grant.relevanceScore %>% match
+                                        </span>
+                                    </div>
+                                    <div
+                                        style="font-size: var(--font-size-xs); color: hsl(var(--color-text-muted)); margin-bottom: var(--space-xs);">
+                                        <%= grant.agency %>
+                                    </div>
+                                    <% if (grant.matchReasons && grant.matchReasons.length> 0) { %>
+                                        <div
+                                            style="font-size: var(--font-size-xs); color: hsl(var(--color-text-light)); margin-bottom: var(--space-sm);">
+                                            • <%= grant.matchReasons.slice(0, 2).join(' • ') %>
+                            </div>
+                            <% } %>
+                            <a href="<%= grant.url %>" target="_blank" class="btn btn-outline btn-sm" style="width: 100%; text-align: center; font-size: var(--font-size-xs);">
+                                View Grant Details →
+                            </a>
+                        </div>
+                        <% }); %>
+                    </div>
+                    <a href="/grants" class="btn btn-secondary" style="margin-top: var(--space-md); width: 100%;">
+                        Browse All Grants
+                    </a>
+                </div>
+                <% } %>
+
+                <!-- Quick Actions -->
+                <div class="action-card">
+                    <h3>🚀 Next Steps</h3>
+                    <div class="action-buttons">
+                        <a href="/generate" class="btn btn-accent">
+                            ➕ Start New Proposal
+                        </a>
+                        <a href="/pricing" class="btn btn-outline">
+                            💎 Upgrade Plan
+                        </a>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+    </section>
+
+    <script>
+        // Export dropdown toggle
+        const exportBtn = document.getElementById(' exportBtn'); const
+            exportMenu = document.getElementById('exportMenu');
+        exportBtn.addEventListener('click', () => {
+            exportMenu.classList.toggle('active');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!exportBtn.contains(e.target) && !exportMenu.contains(e.target)) {
+                exportMenu.classList.remove('active');
+            }
+        });
+    </script>
+                                                ` }) %>

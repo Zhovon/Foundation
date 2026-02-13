@@ -1,0 +1,163 @@
+<style>
+    .header {
+        position: sticky;
+        top: 0;
+        z-index: var(--z-sticky);
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        padding: var(--space-lg) 0;
+    }
+
+    [data-theme="dark"] .header {
+        background: rgba(26, 32, 44, 0.8);
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .logo {
+        font-family: var(--font-heading);
+        font-size: var(--font-size-2xl);
+        font-weight: 800;
+        background: linear-gradient(135deg, hsl(var(--color-primary)), hsl(var(--color-accent)));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-decoration: none;
+    }
+
+    .nav-menu {
+        display: flex;
+        align-items: center;
+        gap: var(--space-xl);
+        list-style: none;
+    }
+
+    .nav-link {
+        color: hsl(var(--color-text));
+        font-weight: 500;
+        transition: color var(--transition-fast);
+        position: relative;
+    }
+
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: hsl(var(--color-primary));
+        transition: width var(--transition-fast);
+    }
+
+    .nav-link:hover::after {
+        width: 100%;
+    }
+
+    .nav-link:hover {
+        color: hsl(var(--color-primary));
+    }
+
+    .dark-mode-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: var(--font-size-xl);
+        padding: var(--space-sm);
+        color: hsl(var(--color-text));
+        transition: transform var(--transition-fast);
+    }
+
+    .dark-mode-toggle:hover {
+        transform: rotate(20deg);
+    }
+
+    .mobile-menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: var(--space-sm);
+    }
+
+    .hamburger {
+        width: 24px;
+        height: 2px;
+        background: hsl(var(--color-text));
+        position: relative;
+        transition: background var(--transition-fast);
+    }
+
+    .hamburger::before,
+    .hamburger::after {
+        content: '';
+        position: absolute;
+        width: 24px;
+        height: 2px;
+        background: hsl(var(--color-text));
+        transition: transform var(--transition-fast);
+    }
+
+    .hamburger::before {
+        top: -8px;
+    }
+
+    .hamburger::after {
+        bottom: -8px;
+    }
+
+    @media (max-width: 768px) {
+        .nav-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: hsl(var(--color-surface));
+            flex-direction: column;
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .nav-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-toggle {
+            display: block;
+        }
+    }
+</style>
+
+<header class="header">
+    <div class="container">
+        <div class="header-content">
+            <a href="/" class="logo">GrantWise AI</a>
+
+            <nav>
+                <ul class="nav-menu" id="mobileMenu">
+                    <li><a href="/" class="nav-link">Home</a></li>
+                    <li><a href="/#features" class="nav-link">Features</a></li>
+                    <li><a href="/grants" class="nav-link">Find Grants</a></li>
+                    <li><a href="/pricing" class="nav-link">Pricing</a></li>
+                    <li><a href="/generate" class="btn btn-primary btn-sm">Start Free</a></li>
+                    <li>
+                        <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
+                            <span class="dark-icon">🌙</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                <span class="hamburger"></span>
+            </button>
+        </div>
+    </div>
+</header>

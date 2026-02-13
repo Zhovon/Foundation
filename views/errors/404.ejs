@@ -1,0 +1,67 @@
+<style>
+    .error-page {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: var(--space-3xl) 0;
+    }
+
+    .error-content {
+        max-width: 600px;
+    }
+
+    .error-code {
+        font-size: 120px;
+        font-weight: 800;
+        background: linear-gradient(135deg, hsl(var(--color-primary)), hsl(var(--color-accent)));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+        margin-bottom: var(--space-lg);
+    }
+
+    .error-title {
+        font-size: var(--font-size-3xl);
+        margin-bottom: var(--space-md);
+    }
+
+    .error-message {
+        color: hsl(var(--color-text-light));
+        margin-bottom: var(--space-2xl);
+    }
+
+    .error-actions {
+        display: flex;
+        gap: var(--space-md);
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .error-illustration {
+        font-size: 100px;
+        margin-bottom: var(--space-xl);
+        animation: float 3s ease-in-out infinite;
+    }
+</style>
+
+<%- include('../layouts/main', { body: ` <section class="error-page">
+    <div class="container">
+        <div class="error-content fade-in">
+            <div class="error-illustration">🔍</div>
+            <div class="error-code">404</div>
+            <h1 class="error-title">Page Not Found</h1>
+            <p class="error-message">
+                Oops! The page you're looking for doesn't exist. It might have been moved or deleted.
+            </p>
+            <div class="error-actions">
+                <a href="/" class="btn btn-primary">Go Home</a>
+                <a href="/generate" class="btn btn-secondary">Generate Proposal</a>
+                <button onclick="history.back()" class="btn btn-outline">Go Back</button>
+            </div>
+        </div>
+    </div>
+    </section>
+    ` }) %>

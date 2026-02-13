@@ -1,0 +1,363 @@
+<style>
+    .form-wizard {
+        padding: var(--space-3xl) 0;
+    }
+
+    .wizard-header {
+        text-align: center;
+        margin-bottom: var(--space-3xl);
+    }
+
+    .progress-container {
+        max-width: 600px;
+        margin: 0 auto var(--space-2xl);
+    }
+
+    .progress-steps {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: var(--space-md);
+    }
+
+    .progress-step {
+        flex: 1;
+        text-align: center;
+        font-size: var(--font-size-sm);
+        color: hsl(var(--color-text-muted));
+        position: relative;
+    }
+
+    .progress-step.active {
+        color: hsl(var(--color-primary));
+        font-weight: 600;
+    }
+
+    .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: hsl(var(--color-surface));
+        padding: var(--space-3xl);
+        border-radius: var(--radius-2xl);
+        box-shadow: var(--shadow-xl);
+    }
+
+    .form-step {
+        display: none;
+    }
+
+    .form-step.active {
+        display: block;
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    .step-title {
+        margin-bottom: var(--space-xl);
+        color: hsl(var(--color-text));
+    }
+
+    .form-actions {
+        display: flex;
+        gap: var(--space-md);
+        justify-content: space-between;
+        margin-top: var(--space-2xl);
+        padding-top: var(--space-2xl);
+        border-top: 1px solid hsl(var(--color-background));
+    }
+
+    .voice-section {
+        background: hsl(var(--color-background));
+        padding: var(--space-xl);
+        border-radius: var(--radius-lg);
+        margin-top: var(--space-xl);
+    }
+
+    .voice-section summary {
+        cursor: pointer;
+        font-weight: 600;
+        color: hsl(var(--color-primary));
+        margin-bottom: var(--space-md);
+    }
+
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        margin-left: var(--space-xs);
+        cursor: help;
+    }
+
+    .tooltip-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        background: hsl(var(--color-info));
+        color: white;
+        border-radius: 50%;
+        font-size: var(--font-size-xs);
+        font-weight: 600;
+    }
+
+    .tooltip-text {
+        visibility: hidden;
+        position: absolute;
+        z-index: var(--z-tooltip);
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 200px;
+        background: hsl(var(--color-text));
+        color: white;
+        text-align: center;
+        padding: var(--space-sm);
+        border-radius: var(--radius-md);
+        font-size: var(--font-size-xs);
+        font-weight: 400;
+    }
+
+    .tooltip:hover .tooltip-text {
+        visibility: visible;
+    }
+
+    input.error,
+    textarea.error {
+        border-color: hsl(var(--color-error));
+    }
+
+    @media (max-width: 768px) {
+        .form-container {
+            padding: var(--space-xl);
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .form-actions .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<%- include('../layouts/main', { title: 'Generate Proposal - GrantWise AI' ,
+    additionalScripts: '<script src="/js/form.js"></script>' , body: ` <section class="form-wizard">
+    <div class="container">
+        <div class="wizard-header">
+            <h1>Create Your Grant Proposal</h1>
+            <p>Follow the steps below to generate a compelling proposal</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-steps">
+                <div class="progress-step active">1. Project Basics</div>
+                <div class="progress-step">2. Solution</div>
+                <div class="progress-step">3. Budget</div>
+                <div class="progress-step">4. Guidelines</div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 25%;"></div>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <div class="form-container">
+            <form id="proposalForm" method="POST" action="/generate">
+
+                <!-- Step 1: Project Basics -->
+                <div class="form-step active">
+                    <h2 class="step-title">Step 1: Project Basics</h2>
+
+                    <div class="form-group">
+                        <label class="form-label" for="organizationName">
+                            Organization Name *
+                            <span class="tooltip">
+                                <span class="tooltip-icon">?</span>
+                                <span class="tooltip-text">Your nonprofit's legal name</span>
+                            </span>
+                        </label>
+                        <input type="text" id="organizationName" name="organizationName" class="form-input"
+                            placeholder="e.g., Youth Empowerment Foundation" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="projectName">
+                            Project Name *
+                            <span class="tooltip">
+                                <span class="tooltip-icon">?</span>
+                                <span class="tooltip-text">A clear, descriptive name for this specific project</span>
+                            </span>
+                        </label>
+                        <input type="text" id="projectName" name="projectName" class="form-input"
+                            placeholder="e.g., After-School STEM Program for Underserved Youth" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="mission">
+                            Mission Statement *
+                            <span class="tooltip">
+                                <span class="tooltip-icon">?</span>
+                                <span class="tooltip-text">Your organization's core purpose and values</span>
+                            </span>
+                        </label>
+                        <textarea id="mission" name="mission" class="form-textarea"
+                            placeholder="Describe your organization's mission and core values..." data-max-length="2000"
+                            required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="problem">
+                            Problem Statement *
+                            <span class="tooltip">
+                                <span class="tooltip-icon">?</span>
+                                <span class="tooltip-text">What specific problem or need does this project
+                                    address?</span>
+                            </span>
+                        </label>
+                        <textarea id="problem" name="problem" class="form-textarea"
+                            placeholder="Describe the problem your project will solve..." data-max-length="2000"
+                            required></textarea>
+                    </div>
+                </div>
+
+                <!-- Step 2: Solution Details -->
+                <div class="form-step">
+                    <h2 class="step-title">Step 2: Your Solution</h2>
+
+                    <div class="form-group">
+                        <label class="form-label" for="activities">
+                            Proposed Activities *
+                            <span class="tooltip">
+                                <span class="tooltip-icon">?</span>
+                                <span class="tooltip-text">What specific activities will you implement?</span>
+                            </span>
+                        </label>
+                        <textarea id="activities" name="activities" class="form-textarea"
+                            placeholder="Describe the activities and interventions you'll implement..."
+                            data-max-length="2000" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="targetPopulation">
+                            Target Population *
+                            <span class="tooltip">
+                                <span class="tooltip-icon">?</span>
+                                <span class="tooltip-text">Who will benefit from this project?</span>
+                            </span>
+                        </label>
+                        <input type="text" id="targetPopulation" name="targetPopulation" class="form-input"
+                            placeholder="e.g., 150 middle school students from low-income families" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="duration">
+                            Project Duration *
+                            <span class="tooltip">
+                                <span class="tooltip-icon">?</span>
+                                <span class="tooltip-text">How long will the project run?</span>
+                            </span>
+                        </label>
+                        <input type="text" id="duration" name="duration" class="form-input"
+                            placeholder="e.g., 12 months (September 2024 - August 2025)" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="outcomes">
+                            Expected Outcomes *
+                            <span class="tooltip">
+                                <span class="tooltip-icon">?</span>
+                                <span class="tooltip-text">What changes or results do you expect to achieve?</span>
+                            </span>
+                        </label>
+                        <textarea id="outcomes" name="outcomes" class="form-textarea"
+                            placeholder="Describe the expected outcomes and impact..." data-max-length="1000"
+                            required></textarea>
+                    </div>
+                </div>
+
+                <!-- Step 3: Budget & Measurement -->
+                <div class="form-step">
+                    <h2 class="step-title">Step 3: Budget & Measurement</h2>
+
+                    <div class="form-group">
+                        <label class="form-label" for="budget">
+                            Budget Information *
+                            <span class="tooltip">
+                                <span class="tooltip-icon">?</span>
+                                <span class="tooltip-text">Total amount requested and key budget categories</span>
+                            </span>
+                        </label>
+                        <textarea id="budget" name="budget" class="form-textarea"
+                            placeholder="e.g., Total: $50,000 - Staff: $30,000, Materials: $15,000, Equipment: $5,000"
+                            data-max-length="1000" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="metrics">
+                            Success Metrics *
+                            <span class="tooltip">
+                                <span class="tooltip-icon">?</span>
+                                <span class="tooltip-text">How will you measure success?</span>
+                            </span>
+                        </label>
+                        <textarea id="metrics" name="metrics" class="form-textarea"
+                            placeholder="Describe how you'll measure and evaluate success..." data-max-length="1000"
+                            required></textarea>
+                    </div>
+                </div>
+
+                <!-- Step 4: Grant Guidelines -->
+                <div class="form-step">
+                    <h2 class="step-title">Step 4: Grant Guidelines</h2>
+
+                    <div class="form-group">
+                        <label class="form-label" for="guidelines">
+                            Grant Guidelines *
+                            <span class="tooltip">
+                                <span class="tooltip-icon">?</span>
+                                <span class="tooltip-text">Paste the funder's guidelines, requirements, and
+                                    priorities</span>
+                            </span>
+                        </label>
+                        <textarea id="guidelines" name="guidelines" class="form-textarea" style="min-height: 200px;"
+                            placeholder="Paste the grant guidelines here, including word limits, required sections, and funder priorities..."
+                            data-max-length="10000" required></textarea>
+                        <span class="form-helper">Include word limits, required sections, and any specific
+                            requirements</span>
+                    </div>
+
+                    <!-- Organization Voice (Optional) -->
+                    <details class="voice-section">
+                        <summary>🎯 Organization Voice Learning (Optional)</summary>
+                        <p style="margin-bottom: var(--space-md); color: hsl(var(--color-text-light));">
+                            Paste 2-3 past successful proposals to help our AI match your unique writing style and tone.
+                        </p>
+                        <div class="form-group">
+                            <textarea id="organizationVoice" name="organizationVoice" class="form-textarea"
+                                style="min-height: 150px;"
+                                placeholder="Paste excerpts from past successful proposals..."
+                                data-max-length="10000"></textarea>
+                        </div>
+                        <button type="button" id="analyzeVoice" class="btn btn-secondary btn-sm">
+                            Analyze Voice
+                        </button>
+                    </details>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" id="prevBtn" class="btn btn-ghost">
+                        ← Previous
+                    </button>
+                    <button type="button" id="nextBtn" class="btn btn-primary">
+                        Next →
+                    </button>
+                    <button type="submit" id="submitBtn" class="btn btn-accent" style="display: none;">
+                        Generate Proposal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </section>
+    ` }) %>
