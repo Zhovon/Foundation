@@ -1,8 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const proposalController = require('../controllers/proposalController');
+const authController = require('../controllers/authController');
 const { proposalValidation, validate } = require('../middleware/validation');
 const { proposalLimiter } = require('../middleware/rateLimiter');
+const { requireAuth, redirectIfAuthenticated, attachUser } = require('../middleware/auth');
+
+// Global middleware - attach user to all requests
+router.use(attachUser);
 
 // Landing page
 router.get('/', (req, res) => {
@@ -10,6 +15,44 @@ router.get('/', (req, res) => {
         title: 'GrantWise AI - AI-Powered Grant Proposals for Nonprofits'
     });
 });
+
+// Authentication routes
+router.get('/signup', redirectIfAuthenticated, (req, res) => {
+    res.render('pages/signup');
+});
+router.post('/auth/signup', authController.signup);
+
+router.get('/login', redirectIfAuthenticated, (req, res) => {
+    res.render('pages/login');
+});
+router.post('/auth/login', authController.login);
+
+router.get('/logout', authController.logout);
+
+router.get('/forgot-password', redirectIfAuthenticated, (req, res) => {
+    res.render('pages/forgot-password');
+});
+router.post('/auth/forgot-password', authController.forgotPassword);
+
+router.get('/reset-password', (req, res) => {
+    res.render('pages/reset-password', { token: req.query.token });
+});
+router.post('/auth/reset-password', authController.resetPassword);
+
+// Protected routes (require authentication)
+router.get('/dashboard', requireAuth, authController.showDashboard);
+
+router.get('/profile', requireAuth, (req, res) => {
+    res.render('pages/profile');
+});
+router.post('/auth/update-profile', requireAuth, authController.updateProfile);
+router.post('/auth/change-password', requireAuth, authController.changePassword);
+router.get('/auth/delete-account', requireAuth, authController.deleteAccount);
+
+// Google OAuth
+router.get('/auth/google', authController.googleAuth);
+router.get('/auth/google/callback', authController.googleCallback);
+
 
 // Pricing page
 router.get('/pricing', (req, res) => {

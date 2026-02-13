@@ -1,0 +1,289 @@
+<style>
+    .dashboard-page {
+        min-height: 100vh;
+        background: hsl(var(--color-background));
+        padding: var(--space-2xl) var(--space-lg);
+    }
+
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--space-3xl);
+        flex-wrap: wrap;
+        gap: var(--space-lg);
+    }
+
+    .dashboard-header h1 {
+        font-size: var(--font-size-3xl);
+        margin: 0;
+    }
+
+    .dashboard-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: var(--space-lg);
+        margin-bottom: var(--space-3xl);
+    }
+
+    .stat-card {
+        background: hsl(var(--color-surface));
+        padding: var(--space-xl);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        transition: transform var(--transition-fast);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .stat-card h3 {
+        font-size: var(--font-size-sm);
+        color: hsl(var(--color-text-muted));
+        margin: 0 0 var(--space-sm) 0;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .stat-value {
+        font-size: var(--font-size-3xl);
+        font-weight: 700;
+        margin: 0;
+        background: linear-gradient(135deg, hsl(var(--color-primary)), hsl(var(--color-accent)));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .stat-label {
+        font-size: var(--font-size-sm);
+        color: hsl(var(--color-text-muted));
+        margin-top: var(--space-sm);
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--space-lg);
+    }
+
+    .section-header h2 {
+        font-size: var(--font-size-2xl);
+        margin: 0;
+    }
+
+    .proposals-section {
+        background: hsl(var(--color-surface));
+        padding: var(--space-2xl);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+    }
+
+    .proposals-list {
+        display: grid;
+        gap: var(--space-lg);
+    }
+
+    .proposal-card {
+        background: hsl(var(--color-background));
+        padding: var(--space-xl);
+        border-radius: var(--radius-md);
+        border: 1px solid hsl(var(--color-border));
+        transition: all var(--transition-fast);
+    }
+
+    .proposal-card:hover {
+        border-color: hsl(var(--color-primary));
+        box-shadow: var(--shadow-md);
+    }
+
+    .proposal-card h3 {
+        font-size: var(--font-size-xl);
+        margin: 0 0 var(--space-sm) 0;
+    }
+
+    .proposal-meta {
+        display: flex;
+        gap: var(--space-lg);
+        color: hsl(var(--color-text-muted));
+        font-size: var(--font-size-sm);
+        margin-bottom: var(--space-md);
+    }
+
+    .proposal-actions {
+        display: flex;
+        gap: var(--space-md);
+        margin-top: var(--space-lg);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: var(--space-3xl);
+        color: hsl(var(--color-text-muted));
+    }
+
+    .empty-state-icon {
+        font-size: 4rem;
+        margin-bottom: var(--space-lg);
+        opacity: 0.5;
+    }
+
+    .tier-badge {
+        display: inline-block;
+        padding: var(--space-xs) var(--space-md);
+        border-radius: var(--radius-full);
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+
+    .tier-badge.free {
+        background: hsl(var(--color-text-muted) / 0.1);
+        color: hsl(var(--color-text-muted));
+    }
+
+    .tier-badge.starter {
+        background: hsl(var(--color-primary) / 0.1);
+        color: hsl(var(--color-primary));
+    }
+
+    .tier-badge.professional {
+        background: hsl(var(--color-accent) / 0.1);
+        color: hsl(var(--color-accent));
+    }
+
+    .tier-badge.team {
+        background: hsl(var(--color-success) / 0.1);
+        color: hsl(var(--color-success));
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: hsl(var(--color-border));
+        border-radius: var(--radius-full);
+        overflow: hidden;
+        margin-top: var(--space-sm);
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, hsl(var(--color-primary)), hsl(var(--color-accent)));
+        transition: width var(--transition-normal);
+    }
+</style>
+
+<%- include('../layouts/main', { title: 'Dashboard - GrantWise AI' , body: ` <div class="dashboard-page">
+    <div class="dashboard-container fade-in">
+        <div class="dashboard-header">
+            <div>
+                <h1>Welcome back, ${user?.name || 'there'}! 👋</h1>
+                <p style="color: hsl(var(--color-text-muted)); margin-top: var(--space-sm);">
+                    Here's your grant proposal overview
+                </p>
+            </div>
+            <a href="/generate" class="btn btn-primary">
+                <span>✨</span> New Proposal
+            </a>
+        </div>
+
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <h3>Subscription Plan</h3>
+                <p class="stat-value">
+                    <span class="tier-badge ${user?.subscription_tier || 'free'}">
+                        ${user?.subscription_tier || 'Free'}
+                    </span>
+                </p>
+                <p class="stat-label">
+                    ${user?.subscription_tier === 'free' ?
+                    '<a href="/pricing" style="color: hsl(var(--color-primary));">Upgrade for more →</a>' :
+                    '<a href="/dashboard/billing" style="color: hsl(var(--color-primary));">Manage subscription →</a>'
+                    }
+                </p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Proposals This Month</h3>
+                <p class="stat-value">${user?.proposals_this_month || 0}</p>
+                <p class="stat-label">
+                    of ${
+                    user?.subscription_tier === 'free' ? '1' :
+                    user?.subscription_tier === 'starter' ? '5' :
+                    'unlimited'
+                    } available
+                </p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${
+                            user?.subscription_tier === 'free' ? 
+                                (user?.proposals_this_month || 0) * 100 :
+                            user?.subscription_tier === 'starter' ?
+                                ((user?.proposals_this_month || 0) / 5) * 100 :
+                                Math.min((user?.proposals_this_month || 0) * 10, 100)
+                        }%"></div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <h3>Account Status</h3>
+                <p class="stat-value">
+                    ${user?.subscription_status === 'active' ? '✅' : '⏸️'}
+                </p>
+                <p class="stat-label">
+                    ${user?.subscription_status === 'active' ? 'Active' : 'Inactive'}
+                </p>
+            </div>
+        </div>
+
+        <div class="proposals-section">
+            <div class="section-header">
+                <h2>Recent Proposals</h2>
+                <a href="/proposals" style="color: hsl(var(--color-primary)); font-size: var(--font-size-sm);">
+                    View all →
+                </a>
+            </div>
+
+            ${proposals && proposals.length > 0 ? `
+            <div class="proposals-list">
+                ${proposals.map(proposal => `
+                <div class="proposal-card">
+                    <h3>${proposal.project_name || 'Untitled Proposal'}</h3>
+                    <div class="proposal-meta">
+                        <span>📁 ${proposal.organization_name || 'No organization'}</span>
+                        <span>📅 ${new Date(proposal.created_at).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                            })}</span>
+                    </div>
+                    <div class="proposal-actions">
+                        <a href="/result?id=${proposal.id}" class="btn btn-secondary">View</a>
+                        <a href="/export/word?id=${proposal.id}" class="btn btn-outline">
+                            📄 Export
+                        </a>
+                    </div>
+                </div>
+                `).join('')}
+            </div>
+            ` : `
+            <div class="empty-state">
+                <div class="empty-state-icon">📝</div>
+                <h3>No proposals yet</h3>
+                <p>Create your first grant proposal to get started!</p>
+                <a href="/generate" class="btn btn-primary" style="margin-top: var(--space-lg);">
+                    Create First Proposal
+                </a>
+            </div>
+            `}
+        </div>
+    </div>
+    </div>
+    ` }) %>
