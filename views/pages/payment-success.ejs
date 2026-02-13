@@ -1,0 +1,133 @@
+<style>
+    .success-page {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--space-2xl);
+        background: linear-gradient(135deg, hsl(var(--color-success) / 0.1), hsl(var(--color-primary) / 0.1));
+    }
+
+    .success-card {
+        background: hsl(var(--color-surface));
+        padding: var(--space-3xl);
+        border-radius: var(--radius-2xl);
+        box-shadow: var(--shadow-xl);
+        text-align: center;
+        max-width: 600px;
+    }
+
+    .success-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, hsl(var(--color-success)), hsl(var(--color-success-light)));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto var(--space-xl);
+        font-size: 3rem;
+    }
+
+    .success-title {
+        font-size: var(--font-size-3xl);
+        margin-bottom: var(--space-md);
+        color: hsl(var(--color-text));
+    }
+
+    .success-message {
+        font-size: var(--font-size-lg);
+        color: hsl(var(--color-text-light));
+        margin-bottom: var(--space-2xl);
+    }
+
+    .success-details {
+        background: hsl(var(--color-background));
+        padding: var(--space-xl);
+        border-radius: var(--radius-lg);
+        margin-bottom: var(--space-2xl);
+        text-align: left;
+    }
+
+    .success-details h3 {
+        font-size: var(--font-size-lg);
+        margin-bottom: var(--space-md);
+        color: hsl(var(--color-primary));
+    }
+
+    .success-details ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .success-details li {
+        padding: var(--space-sm) 0;
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+    }
+
+    .success-details li::before {
+        content: '✓';
+        color: hsl(var(--color-success));
+        font-weight: 800;
+    }
+
+    .success-actions {
+        display: flex;
+        gap: var(--space-md);
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+</style>
+
+<%- include('../layouts/main', { title: 'Payment Successful - GrantWise AI' , body: ` <div class="success-page">
+    <div class="success-card fade-in">
+        <div class="success-icon">
+            🎉
+        </div>
+
+        <h1 class="success-title">Payment Successful!</h1>
+
+        <p class="success-message">
+            Welcome to GrantWise AI <%= tier ? tier.charAt(0).toUpperCase() + tier.slice(1) : 'Premium' %> Plan!
+                Your subscription is now active.
+        </p>
+
+        <div class="success-details">
+            <h3>What's Next?</h3>
+            <ul>
+                <li>Start generating unlimited proposals</li>
+                <li>Access organization voice learning</li>
+                <li>Use advanced compliance checking</li>
+                <li>Export to Word, PDF, and more</li>
+                <li>Get priority support</li>
+            </ul>
+        </div>
+
+        <div class="success-details">
+            <h3>Important Information</h3>
+            <ul>
+                <li>A confirmation email has been sent to your inbox</li>
+                <li>You can manage your subscription anytime from your dashboard</li>
+                <li>Your invoice is available in the customer portal</li>
+                <li>Billing cycle starts today</li>
+            </ul>
+        </div>
+
+        <div class="success-actions">
+            <a href="/generate" class="btn btn-primary btn-lg">
+                Generate Your First Proposal
+            </a>
+            <a href="/dashboard" class="btn btn-outline btn-lg">
+                Go to Dashboard
+            </a>
+        </div>
+
+        <p style="margin-top: var(--space-xl); color: hsl(var(--color-text-muted)); font-size: var(--font-size-sm);">
+            Need help? <a href="mailto:support@grantwise.ai" style="color: hsl(var(--color-primary));">Contact
+                Support</a>
+        </p>
+    </div>
+    </div>
+    ` }) %>
