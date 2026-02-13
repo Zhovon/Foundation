@@ -1,0 +1,197 @@
+<style>
+    .grants-page {
+        padding: var(--space-3xl) 0;
+        min-height: 80vh;
+    }
+
+    .grants-header {
+        text-align: center;
+        margin-bottom: var(--space-3xl);
+    }
+
+    .search-container {
+        max-width: 800px;
+        margin: 0 auto var(--space-3xl);
+        background: hsl(var(--color-surface));
+        padding: var(--space-2xl);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .search-form {
+        display: grid;
+        gap: var(--space-lg);
+    }
+
+    .search-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--space-md);
+    }
+
+    .grants-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: var(--space-xl);
+        margin-top: var(--space-2xl);
+    }
+
+    .grant-card {
+        background: hsl(var(--color-surface));
+        padding: var(--space-xl);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        transition: all var(--transition-fast);
+        border: 1px solid hsl(var(--color-border));
+    }
+
+    .grant-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-xl);
+        border-color: hsl(var(--color-primary));
+    }
+
+    .grant-title {
+        font-size: var(--font-size-lg);
+        font-weight: 600;
+        margin-bottom: var(--space-md);
+        color: hsl(var(--color-text));
+    }
+
+    .grant-agency {
+        color: hsl(var(--color-primary));
+        font-weight: 500;
+        margin-bottom: var(--space-sm);
+    }
+
+    .grant-meta {
+        display: flex;
+        gap: var(--space-lg);
+        margin: var(--space-md) 0;
+        font-size: var(--font-size-sm);
+        color: hsl(var(--color-text-muted));
+    }
+
+    .grant-description {
+        color: hsl(var(--color-text-light));
+        margin: var(--space-md) 0;
+        line-height: 1.6;
+    }
+
+    .loading-state {
+        text-align: center;
+        padding: var(--space-3xl);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: var(--space-3xl);
+        color: hsl(var(--color-text-muted));
+    }
+</style>
+
+<%- include('../layouts/main', { body: ` <section class="grants-page">
+    <div class="container">
+        <div class="grants-header">
+            <h1>Find Federal Grants</h1>
+            <p>Search thousands of federal grant opportunities for nonprofits</p>
+        </div>
+
+        <div class="search-container">
+            <form id="grantsSearchForm" class="search-form">
+                <div class="form-group">
+                    <label for="keyword" class="form-label">Search Keywords</label>
+                    <input type="text" id="keyword" name="keyword" class="form-input"
+                        placeholder="e.g., education, health, environment">
+                </div>
+
+                <div class="search-row">
+                    <div class="form-group">
+                        <label for="category" class="form-label">Category</label>
+                        <select id="category" name="category" class="form-input">
+                            <option value="">All Categories</option>
+                            <option value="ED">Education</option>
+                            <option value="HL">Health</option>
+                            <option value="EN">Environment</option>
+                            <option value="CD">Community Development</option>
+                            <option value="AR">Arts</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eligibility" class="form-label">Eligibility</label>
+                        <select id="eligibility" name="eligibility" class="form-input">
+                            <option value="25">Nonprofits</option>
+                            <option value="">All Eligible</option>
+                            <option value="00">State Governments</option>
+                            <option value="01">County Governments</option>
+                            <option value="04">City/Township Governments</option>
+                            <option value="05">Special District Governments</option>
+                            <option value="06">Public/Indian Housing Authorities</option>
+                            <option value="07">Higher Education Institutions</option>
+                            <option value="11">Individuals</option>
+                            <option value="12">Small Businesses</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    🔍 Search Grants
+                </button>
+            </form>
+        </div>
+
+        <div id="grantsResults">
+            <div class="empty-state">
+                <h3>🔍 Start Your Search</h3>
+                <p>Enter keywords above to find relevant grant opportunities</p>
+            </div>
+        </div>
+    </div>
+    </section>
+
+    <script>
+        const form = document.getElementById('grantsSearchForm');
+        const resultsContainer = document.getElementById('grantsResults');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Show loading state
+            resultsContainer.innerHTML = '<div class="loading-state"><div class="spinner"></div><p>Searching grants...</p></div>';
+
+            const formData = new FormData(form);
+            const params = new URLSearchParams(formData);
+
+            try {
+                const response = await fetch('/api/grants/search?' + params);
+                const data = await response.json();
+
+                if (data.success && data.grants.length > 0) {
+                    displayGrants(data.grants);
+                } else {
+                    resultsContainer.innerHTML = '<div class="empty-state"><h3>No grants found</h3><p>Try different keywords or filters</p></div>';
+                }
+            } catch (error) {
+                resultsContainer.innerHTML = '<div class="empty-state"><h3>⚠️ Search Unavailable</h3><p>Grant search is currently unavailable. Please try again later.</p></div>';
+            }
+        });
+
+        function displayGrants(grants) {
+            const html = '<div class="grants-grid">' + grants.map(grant => \`
+                <div class="grant-card">
+                    <div class="grant-agency">\${grant.agency || 'Federal Agency'}</div>
+                    <h3 class="grant-title">\${grant.title}</h3>
+                    <div class="grant-meta">
+                        <span>💰 \${grant.award || 'Varies'}</span>
+                        <span>📅 \${grant.deadline || 'Rolling'}</span>
+                    </div>
+                    <p class="grant-description">\${(grant.description || '').substring(0, 150)}...</p>
+                    <a href="/grants/\${grant.id}" class="btn btn-outline btn-sm">View Details →</a>
+                </div>
+            \`).join('') + '</div>';
+            
+            resultsContainer.innerHTML = html;
+        }
+    </script>
+    ` }) %>
