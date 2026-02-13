@@ -198,7 +198,8 @@
                         <li>Email support</li>
                         <li>Guidelines compliance checker</li>
                     </ul>
-                    <a href="/generate" class="btn btn-outline" style="width: 100%;">Get Started</a>
+                    <button onclick="subscribeToPlan('starter')" class="btn btn-outline" style="width: 100%;">Get
+                        Started</button>
                 </div>
 
                 <!-- Professional Plan (Featured) -->
@@ -215,7 +216,8 @@
                         <li>Priority support</li>
                         <li>Batch generation</li>
                     </ul>
-                    <a href="/generate" class="btn btn-primary" style="width: 100%;">Start Free Trial</a>
+                    <button onclick="subscribeToPlan('professional')" class="btn btn-primary" style="width: 100%;">Start
+                        Free Trial</button>
                 </div>
 
                 <!-- Team Plan -->
@@ -232,7 +234,8 @@
                         <li>Custom integrations</li>
                         <li>Funder intelligence</li>
                     </ul>
-                    <a href="/generate" class="btn btn-secondary" style="width: 100%;">Contact Sales</a>
+                    <button onclick="subscribeToPlan('team')" class="btn btn-secondary" style="width: 100%;">Contact
+                        Sales</button>
                 </div>
             </div>
 
@@ -308,4 +311,30 @@
                 Free Trial</a>
         </div>
     </section>
+
+    <script>
+        async function subscribeToPlan(tier) {
+            try {
+                const response = await fetch('/api/payment/checkout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ tier })
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.checkoutUrl) {
+                    // Redirect to Paddle checkout
+                    window.location.href = data.checkoutUrl;
+                } else {
+                    alert(data.error || 'Failed to create checkout session. Please try again.');
+                }
+            } catch (error) {
+                console.error('Checkout error:', error);
+                alert('An error occurred. Please try again.');
+            }
+        }
+    </script>
     ` }) %>

@@ -52,4 +52,12 @@ router.get('/api/grants/search', grantsController.searchGrants);
 router.get('/api/grants/:id', grantsController.getGrantDetails);
 router.get('/api/grants/matches', grantsController.findMatches);
 
+// Payment routes (Paddle)
+const paymentController = require('../controllers/paymentController');
+router.post('/api/payment/checkout', paymentController.createCheckout);
+router.post('/api/payment/webhook', paymentController.handleWebhook);
+router.post('/api/payment/cancel', paymentController.cancelSubscription);
+router.get('/api/payment/portal', paymentController.getCustomerPortal);
+router.get('/payment/success', paymentController.showPaymentSuccess);
+
 module.exports = router;
