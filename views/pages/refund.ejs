@@ -1,0 +1,213 @@
+<style>
+    .legal-page {
+        padding: var(--space-3xl) 0;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .legal-page h1 {
+        margin-bottom: var(--space-lg);
+        color: hsl(var(--color-primary));
+    }
+
+    .legal-page h2 {
+        margin-top: var(--space-2xl);
+        margin-bottom: var(--space-md);
+        color: hsl(var(--color-text));
+    }
+
+    .legal-page h3 {
+        margin-top: var(--space-xl);
+        margin-bottom: var(--space-sm);
+        color: hsl(var(--color-text-light));
+    }
+
+    .legal-page p {
+        margin-bottom: var(--space-md);
+        line-height: 1.8;
+    }
+
+    .legal-page ul,
+    .legal-page ol {
+        margin-bottom: var(--space-md);
+        padding-left: var(--space-xl);
+    }
+
+    .legal-page li {
+        margin-bottom: var(--space-sm);
+        line-height: 1.8;
+    }
+
+    .last-updated {
+        color: hsl(var(--color-text-muted));
+        font-size: var(--font-size-sm);
+        margin-bottom: var(--space-2xl);
+    }
+
+    .highlight-box {
+        background: hsl(var(--color-primary) / 0.1);
+        border-left: 4px solid hsl(var(--color-primary));
+        padding: var(--space-lg);
+        border-radius: var(--radius-md);
+        margin: var(--space-xl) 0;
+    }
+</style>
+
+<%- include('../layouts/main', { title: 'Refund Policy - GrantWise AI' , body: ` <div class="container legal-page">
+    <h1>Refund Policy</h1>
+    <p class="last-updated">Last Updated: February 13, 2026</p>
+
+    <div class="highlight-box">
+        <p style="margin: 0;"><strong>Quick Summary:</strong> We offer a 14-day money-back guarantee for first-time
+            subscribers. If you're not satisfied, contact us within 14 days for a full refund.</p>
+    </div>
+
+    <h2>1. 14-Day Money-Back Guarantee</h2>
+    <p>We want you to be completely satisfied with GrantWise AI. If you're not happy with our service, we offer a full
+        refund within 14 days of your initial purchase.</p>
+
+    <h3>1.1 Eligibility</h3>
+    <p>You are eligible for a refund if:</p>
+    <ul>
+        <li>You are a first-time subscriber to GrantWise AI</li>
+        <li>You request a refund within 14 days of your initial payment</li>
+        <li>You have not violated our Terms of Service</li>
+        <li>You have not engaged in fraudulent or abusive behavior</li>
+    </ul>
+
+    <h3>1.2 How to Request a Refund</h3>
+    <p>To request a refund:</p>
+    <ol>
+        <li>Email us at <strong>support@grantwise.ai</strong></li>
+        <li>Include your account email and reason for refund (optional but helpful)</li>
+        <li>We will process your refund within 5-7 business days</li>
+        <li>Refunds are issued to your original payment method</li>
+    </ol>
+
+    <h2>2. Subscription Renewals</h2>
+    <p>Refunds for subscription renewals are handled on a case-by-case basis:</p>
+    <ul>
+        <li><strong>Accidental Renewal:</strong> If you forgot to cancel and contact us within 48 hours of renewal, we
+            may issue a refund</li>
+        <li><strong>Service Issues:</strong> If you experienced technical problems preventing service use, we may issue
+            a prorated refund</li>
+        <li><strong>Regular Renewals:</strong> Generally not eligible for refunds, but you can cancel to prevent future
+            charges</li>
+    </ul>
+
+    <h2>3. Cancellation Policy</h2>
+    <p>You can cancel your subscription at any time:</p>
+    <ul>
+        <li>Go to your Dashboard → Subscription Settings</li>
+        <li>Click "Cancel Subscription"</li>
+        <li>Or access the Paddle Customer Portal</li>
+    </ul>
+    <p>When you cancel:</p>
+    <ul>
+        <li>You retain access until the end of your current billing period</li>
+        <li>No refund is issued for the remaining days</li>
+        <li>Your account automatically downgrades to the Free tier</li>
+        <li>You can resubscribe anytime</li>
+    </ul>
+
+    <h2>4. Prorated Refunds</h2>
+    <p>We do not offer prorated refunds for partial months, except in the following cases:</p>
+    <ul>
+        <li><strong>Service Outage:</strong> If our service is unavailable for more than 24 consecutive hours, we may
+            issue a prorated credit</li>
+        <li><strong>Billing Errors:</strong> If you were incorrectly charged, we will refund the error amount</li>
+        <li><strong>Exceptional Circumstances:</strong> Evaluated on a case-by-case basis</li>
+    </ul>
+
+    <h2>5. Upgrades and Downgrades</h2>
+
+    <h3>5.1 Upgrades</h3>
+    <p>When you upgrade to a higher tier:</p>
+    <ul>
+        <li>You are charged the prorated difference immediately</li>
+        <li>Your new limits take effect immediately</li>
+        <li>Your billing cycle remains the same</li>
+    </ul>
+
+    <h3>5.2 Downgrades</h3>
+    <p>When you downgrade to a lower tier:</p>
+    <ul>
+        <li>The change takes effect at the end of your current billing period</li>
+        <li>No refund is issued for the difference</li>
+        <li>You retain access to current tier features until the period ends</li>
+    </ul>
+
+    <h2>6. Free Trial</h2>
+    <p>If we offer a free trial:</p>
+    <ul>
+        <li>No payment is required during the trial period</li>
+        <li>You can cancel anytime during the trial without charge</li>
+        <li>If you don't cancel, you will be charged at the end of the trial</li>
+        <li>Trial refunds follow the same 14-day policy from the first charge</li>
+    </ul>
+
+    <h2>7. Non-Refundable Situations</h2>
+    <p>Refunds will not be issued in the following cases:</p>
+    <ul>
+        <li>You violated our Terms of Service</li>
+        <li>Your account was terminated for abuse or fraud</li>
+        <li>You request a refund after 14 days (for initial purchase)</li>
+        <li>You used the service extensively before requesting a refund (abuse of policy)</li>
+        <li>You are requesting a refund for a second or subsequent subscription</li>
+    </ul>
+
+    <h2>8. Refund Processing Time</h2>
+    <ul>
+        <li><strong>Approval:</strong> We review refund requests within 1-2 business days</li>
+        <li><strong>Processing:</strong> Approved refunds are processed within 5-7 business days</li>
+        <li><strong>Bank Processing:</strong> Your bank may take an additional 3-5 business days to credit your account
+        </li>
+        <li><strong>Total Time:</strong> Expect 7-14 business days for the full refund process</li>
+    </ul>
+
+    <h2>9. Payment Processor</h2>
+    <p>All payments are processed through <strong>Paddle</strong>. Paddle handles:</p>
+    <ul>
+        <li>Payment processing</li>
+        <li>Tax calculation and remittance</li>
+        <li>Invoicing</li>
+        <li>Refund processing</li>
+    </ul>
+    <p>Refunds are issued through Paddle to your original payment method. If you have questions about a charge, you can
+        also contact Paddle support.</p>
+
+    <h2>10. Chargebacks</h2>
+    <p>If you dispute a charge with your bank (chargeback) instead of contacting us:</p>
+    <ul>
+        <li>Your account will be immediately suspended</li>
+        <li>We may charge a chargeback fee ($15-25)</li>
+        <li>You may be banned from future use</li>
+    </ul>
+    <p><strong>Please contact us first</strong> before initiating a chargeback. We're happy to resolve any billing
+        issues directly.</p>
+
+    <h2>11. Taxes</h2>
+    <p>Taxes (VAT, sales tax, GST) are calculated and collected by Paddle at checkout. Taxes are generally
+        non-refundable, even if your subscription is refunded, as they have been remitted to tax authorities.</p>
+
+    <h2>12. Contact Us</h2>
+    <p>For refund requests or questions about this policy:</p>
+    <ul>
+        <li>Email: <strong>support@grantwise.ai</strong></li>
+        <li>Subject Line: "Refund Request - [Your Email]"</li>
+        <li>Include: Account email, reason for refund (optional)</li>
+    </ul>
+    <p>We typically respond within 24 hours on business days.</p>
+
+    <h2>13. Changes to This Policy</h2>
+    <p>We may update this Refund Policy from time to time. Changes will be posted on this page with an updated "Last
+        Updated" date. Significant changes will be communicated via email.</p>
+
+    <hr style="margin: var(--space-3xl) 0; border: none; border-top: 1px solid hsl(var(--color-border));">
+
+    <div class="highlight-box">
+        <p style="margin: 0;"><strong>Questions?</strong> We're here to help! Contact us at support@grantwise.ai and
+            we'll do our best to resolve any issues.</p>
+    </div>
+    </div>
+    ` }) %>

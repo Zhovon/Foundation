@@ -18,6 +18,19 @@ router.get('/pricing', (req, res) => {
     });
 });
 
+// Legal pages
+router.get('/terms', (req, res) => {
+    res.render('pages/terms', { title: 'Terms of Service - GrantWise AI' });
+});
+
+router.get('/privacy-policy', (req, res) => {
+    res.render('pages/privacy', { title: 'Privacy Policy - GrantWise AI' });
+});
+
+router.get('/refund-policy', (req, res) => {
+    res.render('pages/refund', { title: 'Refund Policy - GrantWise AI' });
+});
+
 // Generator form
 router.get('/generate', proposalController.showGeneratorForm);
 
