@@ -12,14 +12,19 @@ if (!supabaseUrl || !supabaseAnonKey) {
     logger.warn('Supabase credentials not configured. Authentication features will be disabled.');
 }
 
-// Create Supabase client
-const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '', {
-    auth: {
-        autoRefreshToken: true,
-        persistSession: true,
-        detectSessionInUrl: true
-    }
-});
+// Create Supabase client only if credentials are provided
+let supabase = null;
+
+if (supabaseUrl && supabaseAnonKey) {
+    supabase = createClient(supabaseUrl, supabaseAnonKey, {
+        auth: {
+            autoRefreshToken: true,
+            persistSession: true,
+            detectSessionInUrl: true
+        }
+    });
+    logger.info('Supabase client initialized successfully');
+}
 
 /**
  * Get Supabase client instance

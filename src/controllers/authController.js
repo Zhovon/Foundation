@@ -6,6 +6,24 @@ const logger = require('../utils/logger');
  */
 
 /**
+ * Check if Supabase is configured
+ */
+function isSupabaseConfigured() {
+    return supabase !== null;
+}
+
+/**
+ * Middleware to check if auth is available
+ */
+function requireSupabase(req, res, next) {
+    if (!isSupabaseConfigured()) {
+        req.flash('error', 'Authentication is not configured. Please contact support.');
+        return res.redirect('/');
+    }
+    next();
+}
+
+/**
  * Show signup page
  */
 exports.showSignup = (req, res) => {
