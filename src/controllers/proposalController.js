@@ -1,4 +1,4 @@
-const { generateProposal, analyzeOrganizationVoice, refineProposal } = require('../services/openaiService');
+const { generateProposal, analyzeOrganizationVoice, refineProposal } = require('../services/geminiService');
 const { checkCompliance } = require('../services/guidelinesParser');
 const logger = require('../utils/logger');
 
