@@ -321,3 +321,114 @@ exports.showDashboard = async (req, res) => {
         res.redirect('/');
     }
 };
+
+/**
+ * Update user profile
+ */
+exports.updateProfile = async (req, res) => {
+    try {
+        const userId = req.session.user.id;
+        const { name } = req.body;
+
+        const { error } = await supabase
+            .from('users')
+            .update({
+                first_name: name.split(' ')[0],
+                last_name: name.split(' ').slice(1).join(' ')
+            })
+            .eq('id', userId);
+
+        if (error) {
+            logger.error('Profile update error:', error.message);
+            req.flash('error', 'Failed to update profile');
+            return res.redirect('/profile');
+        }
+
+        req.flash('success', 'Profile updated successfully!');
+        res.redirect('/profile');
+
+    } catch (error) {
+        logger.error('Profile update error:', error.message);
+        req.flash('error', 'Failed to update profile');
+        res.redirect('/profile');
+    }
+};
+
+/**
+ * Change password
+ */
+exports.changePassword = async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+
+        // Verify current password
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+            email: req.session.user.email,
+            password: currentPassword
+        });
+
+        if (signInError) {
+            req.flash('error', 'Current password is incorrect');
+            return res.redirect('/profile');
+        }
+
+        // Update password
+        const { error } = await supabase.auth.updateUser({
+            password: newPassword
+        });
+
+        if (error) {
+            logger.error('Password change error:', error.message);
+            req.flash('error', 'Failed to change password');
+            return res.redirect('/profile');
+        }
+
+        req.flash('success', 'Password changed successfully!');
+        res.redirect('/profile');
+
+    } catch (error) {
+        logger.error('Password change error:', error.message);
+        req.flash('error', 'Failed to change password');
+        res.redirect('/profile');
+    }
+};
+
+/**
+ * Delete account
+ */
+exports.deleteAccount = async (req, res) => {
+    try {
+        const userId = req.session.user.id;
+
+        // Delete user's proposals first
+        await supabase
+            .from('proposals')
+            .delete()
+            .eq('user_id', userId);
+
+        // Delete user profile
+        await supabase
+            .from('users')
+            .delete()
+            .eq('id', userId);
+
+        // Delete auth user
+        await supabase.auth.admin.deleteUser(userId);
+
+        // Destroy session
+        req.session.destroy();
+
+        req.flash('success', 'Account deleted successfully');
+        res.redirect('/');
+
+    } catch (error) {
+        logger.error('Account deletion error:', error.message);
+        req.flash('error', 'Failed to delete account');
+        res.redirect('/profile');
+    }
+};
+
+// Aliases for OAuth routes
+exports.googleAuth = exports.googleLogin;
+exports.googleCallback = exports.authCallback;
+

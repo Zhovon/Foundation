@@ -1,205 +1,221 @@
-<style>
+<%- include('../layouts/main', { title: 'Profile Settings - GrantWise AI' , body: ` <style>
     .profile-page {
-        min-height: 100vh;
-        background: hsl(var(--color-background));
-        padding: var(--space-2xl) var(--space-lg);
+    min-height: 100vh;
+    background: hsl(var(--color-background));
+    padding: var(--space-2xl) var(--space-lg);
     }
 
     .profile-container {
-        max-width: 800px;
-        margin: 0 auto;
+    max-width: 800px;
+    margin: 0 auto;
     }
 
     .profile-header {
-        margin-bottom: var(--space-3xl);
+    margin-bottom: var(--space-3xl);
     }
 
     .profile-header h1 {
-        font-size: var(--font-size-3xl);
-        margin-bottom: var(--space-sm);
+    font-size: var(--font-size-3xl);
+    margin-bottom: var(--space-sm);
     }
 
     .profile-header p {
-        color: hsl(var(--color-text-muted));
+    color: hsl(var(--color-text-muted));
     }
 
     .profile-section {
-        background: hsl(var(--color-surface));
-        padding: var(--space-2xl);
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-md);
-        margin-bottom: var(--space-xl);
+    background: hsl(var(--color-surface));
+    padding: var(--space-2xl);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--space-xl);
     }
 
     .profile-section h2 {
-        font-size: var(--font-size-xl);
-        margin-bottom: var(--space-lg);
-        padding-bottom: var(--space-md);
-        border-bottom: 1px solid hsl(var(--color-border));
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid hsl(var(--color-border));
     }
 
     .form-group {
-        margin-bottom: var(--space-lg);
+    margin-bottom: var(--space-lg);
     }
 
     .form-group label {
-        display: block;
-        margin-bottom: var(--space-sm);
-        font-weight: 500;
+    display: block;
+    margin-bottom: var(--space-sm);
+    font-weight: 500;
     }
 
     .form-group input {
-        width: 100%;
-        padding: var(--space-md);
-        border: 1px solid hsl(var(--color-border));
-        border-radius: var(--radius-md);
-        font-size: var(--font-size-md);
-        transition: border-color var(--transition-fast);
+    width: 100%;
+    padding: var(--space-md);
+    border: 1px solid hsl(var(--color-border));
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-md);
+    transition: border-color var(--transition-fast);
     }
 
     .form-group input:focus {
-        outline: none;
-        border-color: hsl(var(--color-primary));
+    outline: none;
+    border-color: hsl(var(--color-primary));
     }
 
     .form-group input:disabled {
-        background: hsl(var(--color-background));
-        cursor: not-allowed;
-        opacity: 0.6;
+    background: hsl(var(--color-background));
+    cursor: not-allowed;
+    opacity: 0.6;
     }
 
     .form-actions {
-        display: flex;
-        gap: var(--space-md);
-        margin-top: var(--space-xl);
+    display: flex;
+    gap: var(--space-md);
+    margin-top: var(--space-xl);
     }
 
     .info-box {
-        background: hsl(var(--color-primary) / 0.05);
-        border: 1px solid hsl(var(--color-primary) / 0.2);
-        padding: var(--space-md);
-        border-radius: var(--radius-md);
-        margin-top: var(--space-md);
-        font-size: var(--font-size-sm);
-        color: hsl(var(--color-text-muted));
+    background: hsl(var(--color-primary) / 0.05);
+    border: 1px solid hsl(var(--color-primary) / 0.2);
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    margin-top: var(--space-md);
+    font-size: var(--font-size-sm);
+    color: hsl(var(--color-text-muted));
     }
 
     .danger-zone {
-        border: 1px solid hsl(var(--color-error));
-        background: hsl(var(--color-error) / 0.05);
+    border: 1px solid hsl(var(--color-error));
+    background: hsl(var(--color-error) / 0.05);
     }
 
     .danger-zone h2 {
-        color: hsl(var(--color-error));
+    color: hsl(var(--color-error));
     }
-</style>
 
-<%- include('../layouts/main', { title: 'Profile Settings - GrantWise AI' , body: ` <div class="profile-page">
-    <div class="profile-container fade-in">
-        <div class="profile-header">
-            <h1>Profile Settings</h1>
-            <p>Manage your account information and preferences</p>
-        </div>
+    .tier-badge {
+    display: inline-block;
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-transform: capitalize;
+    }
 
-        <!-- Personal Information -->
-        <div class="profile-section">
-            <h2>Personal Information</h2>
-            <form action="/auth/update-profile" method="POST">
-                <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" value="${user?.name || ''}" required>
-                </div>
+    .tier-badge.free {
+    background: hsl(var(--color-text-muted) / 0.1);
+    color: hsl(var(--color-text-muted));
+    }
 
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="${user?.email || ''}" disabled>
-                    <div class="info-box">
-                        Email cannot be changed. Contact support if you need to update it.
+    .btn-error {
+    background: hsl(var(--color-error));
+    color: white;
+    border: none;
+    padding: var(--space-md) var(--space-xl);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    }
+
+    .btn-error:hover {
+    background: hsl(var(--color-error) / 0.9);
+    transform: translateY(-1px);
+    }
+    </style>
+
+    <div class="profile-page">
+        <div class="profile-container fade-in">
+            <div class="profile-header">
+                <h1>Profile Settings</h1>
+                <p>Manage your account information and preferences</p>
+            </div>
+
+            <!-- Personal Information -->
+            <div class="profile-section">
+                <h2>Personal Information</h2>
+                <form action="/auth/update-profile" method="POST">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" value="" required>
                     </div>
-                </div>
 
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                    <a href="/dashboard" class="btn btn-outline">Cancel</a>
-                </div>
-            </form>
-        </div>
-
-        <!-- Change Password -->
-        <div class="profile-section">
-            <h2>Change Password</h2>
-            <form action="/auth/change-password" method="POST" id="passwordForm">
-                <div class="form-group">
-                    <label for="currentPassword">Current Password</label>
-                    <input type="password" id="currentPassword" name="currentPassword" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="newPassword">New Password</label>
-                    <input type="password" id="newPassword" name="newPassword" required minlength="8">
-                </div>
-
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm New Password</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required>
-                </div>
-
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Update Password</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Subscription -->
-        <div class="profile-section">
-            <h2>Subscription</h2>
-            <div style="display: grid; gap: var(--space-md);">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <strong>Current Plan:</strong>
-                        <span class="tier-badge ${user?.subscription_tier || 'free'}"
-                            style="margin-left: var(--space-sm);">
-                            ${user?.subscription_tier || 'Free'}
-                        </span>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" value="" disabled>
+                        <div class="info-box">
+                            Email cannot be changed. Contact support if you need to update it.
+                        </div>
                     </div>
-                    ${user?.subscription_tier === 'free' ?
-                    '<a href="/pricing" class="btn btn-primary">Upgrade Plan</a>' :
-                    '<a href="/dashboard/billing" class="btn btn-outline">Manage Subscription</a>'
-                    }
-                </div>
 
-                <div
-                    style="display: flex; justify-content: space-between; padding: var(--space-md); background: hsl(var(--color-background)); border-radius: var(--radius-md);">
-                    <span>Proposals this month:</span>
-                    <strong>${user?.proposals_this_month || 0} / ${
-                        user?.subscription_tier === 'free' ? '1' :
-                        user?.subscription_tier === 'starter' ? '5' :
-                        'unlimited'
-                        }</strong>
-                </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <a href="/dashboard" class="btn btn-outline">Cancel</a>
+                    </div>
+                </form>
+            </div>
 
-                <div
-                    style="display: flex; justify-content: space-between; padding: var(--space-md); background: hsl(var(--color-background)); border-radius: var(--radius-md);">
-                    <span>Status:</span>
-                    <strong
-                        style="color: ${user?.subscription_status === 'active' ? 'hsl(var(--color-success))' : 'hsl(var(--color-text-muted))'};">
-                        ${user?.subscription_status === 'active' ? '✅ Active' : '⏸️ Inactive'}
-                    </strong>
+            <!-- Change Password -->
+            <div class="profile-section">
+                <h2>Change Password</h2>
+                <form action="/auth/change-password" method="POST" id="passwordForm">
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <input type="password" id="currentPassword" name="currentPassword" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" id="newPassword" name="newPassword" required minlength="8">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Update Password</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Subscription -->
+            <div class="profile-section">
+                <h2>Subscription</h2>
+                <div style="display: grid; gap: var(--space-md);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>Current Plan:</strong>
+                            <span class="tier-badge free" style="margin-left: var(--space-sm);">Free</span>
+                        </div>
+                        <a href="/pricing" class="btn btn-primary">Upgrade Plan</a>
+                    </div>
+
+                    <div
+                        style="display: flex; justify-content: space-between; padding: var(--space-md); background: hsl(var(--color-background)); border-radius: var(--radius-md);">
+                        <span>Proposals this month:</span>
+                        <strong>0 / 1</strong>
+                    </div>
+
+                    <div
+                        style="display: flex; justify-content: space-between; padding: var(--space-md); background: hsl(var(--color-background)); border-radius: var(--radius-md);">
+                        <span>Status:</span>
+                        <strong style="color: hsl(var(--color-success));">✅ Active</strong>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Danger Zone -->
-        <div class="profile-section danger-zone">
-            <h2>⚠️ Danger Zone</h2>
-            <p style="color: hsl(var(--color-text-muted)); margin-bottom: var(--space-lg);">
-                Once you delete your account, there is no going back. Please be certain.
-            </p>
-            <button type="button" class="btn btn-error" onclick="confirmDelete()">
-                Delete Account
-            </button>
+            <!-- Danger Zone -->
+            <div class="profile-section danger-zone">
+                <h2>⚠️ Danger Zone</h2>
+                <p style="color: hsl(var(--color-text-muted)); margin-bottom: var(--space-lg);">
+                    Once you delete your account, there is no going back. Please be certain.
+                </p>
+                <button type="button" class="btn btn-error" onclick="confirmDelete()">
+                    Delete Account
+                </button>
+            </div>
         </div>
-    </div>
     </div>
 
     <script>
@@ -224,50 +240,4 @@
             }
         }
     </script>
-
-    <style>
-        .tier-badge {
-            display: inline-block;
-            padding: var(--space-xs) var(--space-md);
-            border-radius: var(--radius-full);
-            font-size: var(--font-size-sm);
-            font-weight: 600;
-            text-transform: capitalize;
-        }
-
-        .tier-badge.free {
-            background: hsl(var(--color-text-muted) / 0.1);
-            color: hsl(var(--color-text-muted));
-        }
-
-        .tier-badge.starter {
-            background: hsl(var(--color-primary) / 0.1);
-            color: hsl(var(--color-primary));
-        }
-
-        .tier-badge.professional {
-            background: hsl(var(--color-accent) / 0.1);
-            color: hsl(var(--color-accent));
-        }
-
-        .tier-badge.team {
-            background: hsl(var(--color-success) / 0.1);
-            color: hsl(var(--color-success));
-        }
-
-        .btn-error {
-            background: hsl(var(--color-error));
-            color: white;
-            border: none;
-            padding: var(--space-md) var(--space-xl);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: all var(--transition-fast);
-        }
-
-        .btn-error:hover {
-            background: hsl(var(--color-error) / 0.9);
-            transform: translateY(-1px);
-        }
-    </style>
     ` }) %>
