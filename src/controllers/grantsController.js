@@ -1,4 +1,8 @@
-const { searchGrants, getGrantDetails, findMatchingGrants } = require('../services/grantsService');
+const {
+    searchGrants: searchGrantsService,
+    getGrantDetails: getGrantDetailsService,
+    findMatchingGrants: findMatchingGrantsService
+} = require('../services/grantsService');
 const logger = require('../utils/logger');
 
 /**
@@ -16,7 +20,7 @@ exports.searchGrants = async (req, res) => {
 
         const startRecordNum = (page - 1) * rows;
 
-        const grants = await searchGrants({
+        const grants = await searchGrantsService({
             keyword,
             category,
             eligibility,
@@ -77,7 +81,7 @@ exports.findMatches = async (req, res) => {
             });
         }
 
-        const matches = await findMatchingGrants(lastProposal.projectData);
+        const matches = await findMatchingGrantsService(lastProposal.projectData);
 
         res.json({
             success: true,
