@@ -98,7 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/generate', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify(Object.fromEntries(formData))
             });
@@ -143,7 +144,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const response = await fetch('/api/analyze-voice', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     },
                     body: JSON.stringify({ pastProposals: voiceText })
                 });
