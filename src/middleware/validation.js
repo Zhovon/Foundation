@@ -9,6 +9,7 @@ const validate = (req, res, next) => {
         if (req.xhr || req.headers.accept.indexOf('json') > -1) {
             return res.status(400).json({
                 success: false,
+                error: errors.array().map(e => `${e.param}: ${e.msg}`).join('; '),
                 errors: errors.array()
             });
         }
@@ -41,12 +42,12 @@ const proposalValidation = [
     body('problem')
         .trim()
         .notEmpty().withMessage('Problem description is required')
-        .isLength({ min: 50, max: 2000 }).withMessage('Problem description must be between 50 and 2000 characters'),
+        .isLength({ min: 20, max: 2000 }).withMessage('Problem description must be at least 20 characters'),
 
     body('activities')
         .trim()
         .notEmpty().withMessage('Proposed activities are required')
-        .isLength({ min: 50, max: 2000 }).withMessage('Activities description must be between 50 and 2000 characters'),
+        .isLength({ min: 20, max: 2000 }).withMessage('Activities description must be at least 20 characters'),
 
     body('targetPopulation')
         .trim()
@@ -61,7 +62,7 @@ const proposalValidation = [
     body('outcomes')
         .trim()
         .notEmpty().withMessage('Expected outcomes are required')
-        .isLength({ min: 50, max: 1000 }).withMessage('Outcomes must be between 50 and 1000 characters'),
+        .isLength({ min: 20, max: 1000 }).withMessage('Outcomes must be at least 20 characters'),
 
     body('budget')
         .trim()
@@ -71,7 +72,7 @@ const proposalValidation = [
     body('metrics')
         .trim()
         .notEmpty().withMessage('Success metrics are required')
-        .isLength({ min: 20, max: 1000 }).withMessage('Metrics must be between 20 and 1000 characters'),
+        .isLength({ min: 10, max: 1000 }).withMessage('Metrics must be at least 10 characters'),
 
     body('guidelines')
         .trim()
