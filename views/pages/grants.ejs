@@ -173,7 +173,20 @@
                     resultsContainer.innerHTML = '<div class="empty-state"><h3>No grants found</h3><p>Try different keywords or filters</p></div>';
                 }
             } catch (error) {
-                resultsContainer.innerHTML = '<div class="empty-state"><h3>⚠️ Search Unavailable</h3><p>Grant search is currently unavailable. Please try again later.</p></div>';
+                console.error('Grant search error:', error);
+                resultsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <h3>⚠️ Grant Search Temporarily Unavailable</h3>
+                        <p>The Grants.gov API is currently experiencing issues or has changed.</p>
+                        <p style="margin-top: var(--space-md);">
+                            <strong>Alternative:</strong> Visit 
+                            <a href="https://www.grants.gov/search-grants" target="_blank" rel="noopener" style="color: hsl(var(--color-primary));">
+                                Grants.gov directly
+                            </a> 
+                            to search for federal grant opportunities.
+                        </p>
+                    </div>
+                `;
             }
         });
 

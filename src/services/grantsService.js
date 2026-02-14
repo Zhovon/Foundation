@@ -74,8 +74,22 @@ async function searchGrants(criteria = {}) {
         return grants;
 
     } catch (error) {
-        logger.error('Error searching Grants.gov:', error.message);
-        throw new Error('Failed to search grants. Please try again.');
+        logger.error('Error searching Grants.gov:', {
+            message: error.message,
+            response: error.response?.status,
+            data: error.response?.data
+        });
+
+        // Check if it's an API availability issue
+        if (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT') {
+            throw new Error('Grants.gov API is currently slow or unavailable. Please try again later.');
+        }
+
+        if (error.response?.status === 503 || error.response?.status === 502) {
+            throw new Error('Grants.gov API is temporarily unavailable. Please try again in a few minutes.');
+        }
+
+        throw new Error('Unable to search grants at this time. The Grants.gov API may be experiencing issues.');
     }
 }
 
