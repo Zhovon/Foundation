@@ -3,7 +3,7 @@ const { parseGuidelines } = require('./guidelinesParser');
 const logger = require('../utils/logger');
 
 // Gemini model configuration
-const GEMINI_MODEL = 'gemini-1.5-flash'; // Free tier model
+const GEMINI_MODEL = 'gemini-pro'; // Stable model name
 const MAX_OUTPUT_TOKENS = 8000;
 
 /**
