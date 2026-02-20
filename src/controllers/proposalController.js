@@ -66,7 +66,9 @@ exports.generateProposal = async (req, res, next) => {
         // Redirect to results page
         res.redirect('/result');
     } catch (error) {
-        logger.error('Error in generateProposal controller:', error.message);
+        logger.error('Error in generateProposal controller', {
+            error: error.message
+        });
 
         if (req.xhr || req.headers.accept.indexOf('json') > -1) {
             return res.status(500).json({

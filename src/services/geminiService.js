@@ -3,8 +3,57 @@ const { parseGuidelines } = require('./guidelinesParser');
 const logger = require('../utils/logger');
 
 // Gemini model configuration
-const GEMINI_MODEL = 'gemini-pro'; // Stable model name
+const GEMINI_MODEL = process.env.GEMINI_MODEL;
+const GEMINI_MODEL_FALLBACKS = ['gemini-1.5-flash', 'gemini-1.5-pro'];
 const MAX_OUTPUT_TOKENS = 8000;
+
+function getCandidateModels() {
+    const models = [];
+
+    if (GEMINI_MODEL && GEMINI_MODEL.trim()) {
+        models.push(GEMINI_MODEL.trim());
+    }
+
+    models.push(...GEMINI_MODEL_FALLBACKS);
+
+    return [...new Set(models)];
+}
+
+function isUnavailableModelError(error) {
+    const message = error?.message || '';
+    return (
+        message.includes('404 Not Found') ||
+        message.includes('is not found for API version') ||
+        message.includes('models/')
+    );
+}
+
+async function generateWithModelFallback(client, payload, context = {}) {
+    const candidates = getCandidateModels();
+    let lastError = null;
+
+    for (const modelName of candidates) {
+        try {
+            const model = client.getGenerativeModel({ model: modelName });
+            const result = await model.generateContent(payload);
+            return { result, modelName };
+        } catch (error) {
+            lastError = error;
+
+            if (isUnavailableModelError(error)) {
+                logger.warn('Gemini model unavailable, trying fallback', {
+                    attemptedModel: modelName,
+                    ...context
+                });
+                continue;
+            }
+
+            throw error;
+        }
+    }
+
+    throw lastError || new Error('No available Gemini model found');
+}
 
 /**
  * Generate a grant proposal using Google Gemini
@@ -15,7 +64,6 @@ const MAX_OUTPUT_TOKENS = 8000;
 async function generateProposal(projectData, options = {}) {
     try {
         const client = getGeminiClient();
-        const model = client.getGenerativeModel({ model: GEMINI_MODEL });
 
         // Parse guidelines for better compliance
         const parsedGuidelines = parseGuidelines(projectData.guidelines);
@@ -25,16 +73,18 @@ async function generateProposal(projectData, options = {}) {
 
         logger.info('Generating proposal with Gemini', {
             projectName: projectData.projectName,
-            model: GEMINI_MODEL,
+            configuredModel: GEMINI_MODEL || 'default-fallback',
             wordLimit: parsedGuidelines.wordLimit
         });
 
-        const result = await model.generateContent({
+        const { result, modelName } = await generateWithModelFallback(client, {
             contents: [{ role: 'user', parts: [{ text: prompt }] }],
             generationConfig: {
                 maxOutputTokens: MAX_OUTPUT_TOKENS,
                 temperature: 0.7,
             },
+        }, {
+            projectName: projectData.projectName
         });
 
         const response = result.response;
@@ -42,14 +92,14 @@ async function generateProposal(projectData, options = {}) {
 
         logger.info('Proposal generated successfully', {
             projectName: projectData.projectName,
-            model: GEMINI_MODEL
+            model: modelName
         });
 
         return {
             proposal,
             parsedGuidelines,
             metadata: {
-                model: GEMINI_MODEL,
+                model: modelName,
                 generatedAt: new Date()
             }
         };
@@ -127,18 +177,19 @@ function buildProposalPrompt(data, parsedGuidelines) {
 async function analyzeOrganizationVoice(pastProposals) {
     try {
         const client = getGeminiClient();
-        const model = client.getGenerativeModel({ model: GEMINI_MODEL });
 
         logger.info('Analyzing organization voice');
 
         const prompt = `You are an expert in analyzing writing styles and organizational voice. Identify key characteristics, tone, vocabulary patterns, and unique phrases.\n\nAnalyze the writing style and voice in these past grant proposals:\n\n${pastProposals}\n\nProvide a detailed analysis of:\n1. Tone (formal, conversational, passionate, etc.)\n2. Common vocabulary and phrases\n3. Sentence structure patterns\n4. Unique characteristics\n5. Key themes and values`;
 
-        const result = await model.generateContent({
+        const { result } = await generateWithModelFallback(client, {
             contents: [{ role: 'user', parts: [{ text: prompt }] }],
             generationConfig: {
                 maxOutputTokens: 2000,
                 temperature: 0.5,
             },
+        }, {
+            feature: 'analyzeOrganizationVoice'
         });
 
         const analysis = result.response.text();
@@ -164,18 +215,19 @@ async function analyzeOrganizationVoice(pastProposals) {
 async function refineProposal(proposal, instruction) {
     try {
         const client = getGeminiClient();
-        const model = client.getGenerativeModel({ model: GEMINI_MODEL });
 
         logger.info('Refining proposal with instruction:', instruction);
 
         const prompt = `You are an expert grant writer helping to refine and improve grant proposals.\n\nHere is a grant proposal:\n\n${proposal}\n\nPlease ${instruction}\n\nReturn the complete refined proposal.`;
 
-        const result = await model.generateContent({
+        const { result } = await generateWithModelFallback(client, {
             contents: [{ role: 'user', parts: [{ text: prompt }] }],
             generationConfig: {
                 maxOutputTokens: MAX_OUTPUT_TOKENS,
                 temperature: 0.7,
             },
+        }, {
+            feature: 'refineProposal'
         });
 
         const refinedProposal = result.response.text();

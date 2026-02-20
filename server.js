@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const session = require('express-session');
 const flash = require('connect-flash');
 const logger = require('./src/utils/logger');
+const { checkGeminiModelConfiguration } = require('./src/config/gemini');
 const { errorHandler, notFound } = require('./src/middleware/errorHandler');
 const { generalLimiter } = require('./src/middleware/rateLimiter');
 
@@ -96,6 +97,9 @@ const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {
     logger.info(`GrantWise AI server running on port ${PORT}`);
     logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
+
+    checkGeminiModelConfiguration();
+
     console.log(`\n🚀 GrantWise AI is running!`);
     console.log(`📍 Local: http://localhost:${PORT}`);
     console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}\n`);
